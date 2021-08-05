@@ -1,5 +1,6 @@
 const accessControl = (req, res, next) => {
-    console.log('middleware');
+    req.requestTime = Date.now()
+    console.log(req.requestTime);
     next();
 }
 module.exports = { accessControl }

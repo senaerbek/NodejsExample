@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 require('../helper/connectdatabase')();
-
-
-
+const { accessControl } = require('../middleware');
+router.use(accessControl);
+const { getToken } = require('../middlewares/authMiddleware');
+router.use(getToken)
 const Question = require('../models/question');
+
 
 router.get("/", (req, res) => {
     Question.find({}).then((data) => {
