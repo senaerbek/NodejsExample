@@ -26,7 +26,7 @@ const UserSchema = new Schema({
         type: String,
         minlength: 6,
         required: true,
-        select: false
+        
     },
     createdAt: {
         type: Date,
@@ -46,16 +46,12 @@ UserSchema.methods.generateJwtFromUser = function () {
     return token;
 }
 
-UserSchema.pre("save", function (next) {
-    bcrypt.genSalt(10, (err, salt) => {
-        if (err) next(err);
-        bcrypt.hash(this.password, salt, (err, hash) => {
-            if (err) next(err);
-            this.password = hash;
-            next();
-        });
-    });
-    next();
+UserSchema.pre("save", async function (next) {
+    if(this.password) {                                                                                                                                                        
+        var salt = await bcrypt.genSaltSync(10)                                                                                                                                     
+        this.password  = await bcrypt.hashSync(this.password, salt)                                                                                                                
+    }                                                                                                                                                                          
+    next()  
 })
 
 module.exports = mongoose.model('user', UserSchema);
