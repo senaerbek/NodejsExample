@@ -11,7 +11,10 @@ const getToken = (req, res, next) => {
             if (err) {
                 console.log(err);
             }
-            console.log(decoded);
+            req.user = {
+                id:decoded.id,
+                name:decoded.name,
+            }
         });
     }
     else {

@@ -15,11 +15,9 @@ router.post("/", async (req, res, next) => {
             password
         });
         sendJwt(user, res);
-
     } catch (error) {
         return next(error);
     }
 });
-
 
 module.exports = router
