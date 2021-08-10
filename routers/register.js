@@ -1,21 +1,32 @@
 const express = require('express');
 const router = express.Router();
-require('../helper/connectdatabase')();
-const { accessControl } = require('../middleware');
+const {accessControl} = require('../middleware');
 router.use(accessControl);
 const User = require('../models/user');
-const {sendJwt} = require('../helper/Auth/sendJwt');
 
 router.post("/", async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const {name, email, password} = req.body;
     try {
         const user = await User.create({
             name,
             email,
             password
         });
-        sendJwt(user, res);
+        res.status(200).json({
+            success: true,
+            data: {
+                name: user.name,
+                email: user.email
+            }
+        });
     } catch (error) {
+        const userControl = await User.findOne({email});
+        if (userControl) {
+            res.status(401).json({
+                success: false,
+                data: 'User already exist'
+            })
+        }
         return next(error);
     }
 });

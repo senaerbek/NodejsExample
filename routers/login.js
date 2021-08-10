@@ -1,25 +1,27 @@
 const express = require('express');
 const router = express.Router();
-require('../helper/connectdatabase')();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const {sendJwt} = require('../helper/Auth/sendJwt');
-
+const { sendJwt } = require('../helper/Auth/sendJwt');
 
 router.get("/", async (req, res) => {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email }).select("+password");
-    console.log(user)
+    if (!user) {
+        res.status(404).json({
+            success: false,
+            data: 'User not found'
+        })
+    }
     if (bcrypt.compareSync(password, user.password)) {
         sendJwt(user, res);
     }
     else {
-        console.log('eşleşmiyor')
+        res.status(400).json({
+            success: false,
+            data: 'Password is incorrect'
+        })
     }
-
-
-
 });
 
 module.exports = router

@@ -8,7 +8,7 @@ const connectionDatabase = () => {
             console.log('connected');
         })
         .catch((err) => {
-            console.log('err',err)
+            console.log('err', err)
         })
 }
 

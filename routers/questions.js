@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-require('../helper/connectdatabase')();
-const { accessControl } = require('../middleware');
-router.use(accessControl);
-const { getToken } = require('../middlewares/authMiddleware');
+const {getToken} = require('../middlewares/authMiddleware');
 router.use(getToken)
 const Question = require('../models/question');
 
+//todo düzenlenecek
 
 router.get("/", (req, res) => {
     Question.find({}).then((data) => {
@@ -38,7 +36,7 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res, next) => {
-    const promise = Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const promise = Question.findByIdAndUpdate(req.params.id, req.body, {new: true});
     promise.then((data) => {
         if (!data) {
             next('yok')
@@ -55,7 +53,7 @@ router.delete('/:id', (req, res, next) => {
         if (!data) {
             next('yok')
         }
-        res.json({ message: 'silindi' })
+        res.json({message: 'silindi'})
     }).catch((err) => {
         res.json(err)
     })

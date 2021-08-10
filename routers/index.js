@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+require('../helper/connectdatabase')();
 const questions = require('../routers/questions')
 const register = require('../routers/register')
 const user = require('../routers/user')

@@ -26,7 +26,7 @@ const UserSchema = new Schema({
         type: String,
         minlength: 6,
         required: true,
-        
+
     },
     createdAt: {
         type: Date,
@@ -35,7 +35,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.methods.generateJwtFromUser = function () {
-    const { JWT_SECRET_KEY } = process.env;
+    const {JWT_SECRET_KEY} = process.env;
     const payload = {
         id: this._id,
         name: this.name
@@ -47,11 +47,11 @@ UserSchema.methods.generateJwtFromUser = function () {
 }
 
 UserSchema.pre("save", async function (next) {
-    if(this.password) {                                                                                                                                                        
-        var salt = await bcrypt.genSaltSync(10)                                                                                                                                     
-        this.password  = await bcrypt.hashSync(this.password, salt)                                                                                                                
-    }                                                                                                                                                                          
-    next()  
+    if (this.password) {
+        var salt = await bcrypt.genSaltSync(10);
+        this.password = await bcrypt.hashSync(this.password, salt);
+    }
+    next();
 })
 
 module.exports = mongoose.model('user', UserSchema);
